@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: study-platform
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/studyplatform
+    username: studyplatform
+    password: studyplatform_dev
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    default-property-inclusion: non_null
+
+server:
+  port: 8080
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:your-256-bit-secret-key-change-this-in-production-please}
+    expiration-ms: 86400000        # 24 hours
+    refresh-expiration-ms: 604800000  # 7 days
+
+  cors:
+    allowed-origins: http://localhost:4200,http://localhost:3000
+
+  aws:
+    s3:
+      bucket: ${AWS_S3_BUCKET:studyplatform-documents}
+      region: ${AWS_REGION:eu-west-1}
+
+  claude:
+    api-key: ${CLAUDE_API_KEY:}
+    model: claude-sonnet-4-20250514
+    max-tokens: 4096
