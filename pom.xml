@@ -79,6 +79,7 @@
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
 
+
         <!-- AWS S3 (needed later but declare now) -->
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
