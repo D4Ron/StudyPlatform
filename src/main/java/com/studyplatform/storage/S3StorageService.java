@@ -79,6 +79,19 @@ public class S3StorageService implements StorageService {
     }
 
     @Override
+    public String storeBytes(byte[] data, String key) {
+        PutObjectRequest request = PutObjectRequest.builder()
+                .bucket(bucket)
+                .key(key)
+                .contentLength((long) data.length)
+                .build();
+
+        s3Client.putObject(request, RequestBody.fromBytes(data));
+        log.info("Stored bytes in S3: {} ({} bytes)", key, data.length);
+        return key;
+    }
+
+    @Override
     public InputStream retrieve(String key) {
         try {
             GetObjectRequest request = GetObjectRequest.builder()

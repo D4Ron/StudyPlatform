@@ -44,11 +44,23 @@ public class LocalStorageService implements StorageService {
         try {
             Path targetDir = rootLocation.resolve(key).getParent();
             Files.createDirectories(targetDir);
-
             Path targetFile = rootLocation.resolve(key).normalize();
             Files.copy(file.getInputStream(), targetFile, StandardCopyOption.REPLACE_EXISTING);
-
             log.info("Stored file locally: {}", key);
+            return key;
+        } catch (IOException e) {
+            throw ApiException.badRequest("Failed to store file: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public String storeBytes(byte[] data, String key) {
+        try {
+            Path targetDir = rootLocation.resolve(key).getParent();
+            Files.createDirectories(targetDir);
+            Path targetFile = rootLocation.resolve(key).normalize();
+            Files.write(targetFile, data);
+            log.info("Stored bytes locally: {} ({} bytes)", key, data.length);
             return key;
         } catch (IOException e) {
             throw ApiException.badRequest("Failed to store file: " + e.getMessage());
@@ -92,8 +104,6 @@ public class LocalStorageService implements StorageService {
 
     @Override
     public String generateDownloadUrl(String key) {
-        // For local storage, return a relative API path
-        // The DocumentController has a download endpoint that serves the file
         return "/api/documents/download/" + key;
     }
 }

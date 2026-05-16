@@ -77,6 +77,16 @@ public class DocumentController {
                         "attachment; filename=\"" + doc.getFilename() + "\"")
                 .body(resource);
     }
+    @PostMapping(value = "/batch", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<List<DocumentUploadResponse>> uploadBatch(
+            @CurrentUser UserPrincipal principal,
+            @RequestParam("files") List<MultipartFile> files,
+            @RequestParam(value = "groupId", required = false) UUID groupId) {
+        List<DocumentUploadResponse> responses = files.stream()
+                .map(file -> documentService.upload(file, groupId, principal.getUser()))
+                .toList();
+        return ResponseEntity.status(HttpStatus.CREATED).body(responses);
+    }
 
     // ── Delete ────────────────────────────────────────────────
 
