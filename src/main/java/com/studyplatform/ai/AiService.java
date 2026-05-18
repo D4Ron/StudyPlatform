@@ -38,7 +38,7 @@ public class AiService {
                 topic, level, specificConcept, documentText);
 
         String response = claudeClient.chat(
-                PromptBuilder.GUIDE_SYSTEM_PROMPT, userMessage, 8000);
+                PromptBuilder.GUIDE_SYSTEM_PROMPT, userMessage, 16000);
 
         return parseJson(response, "guide");
     }
